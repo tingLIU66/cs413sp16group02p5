@@ -34,17 +34,16 @@ public class Dots {
     /**
      * @param x dot horizontal coordinate.
      * @param y dot vertical coordinate.
-     * @param color dot color.
-     * @param diameter dot size.
       */
-    public void addDot(final float x, final float y, final int color, final int diameter) {
-        dots.add(new Dot(x, y, color, diameter));
+    public void addDot(final int x, final int y) {
+        dots.add(new Dot(x, y));
         notifyListener();
     }
 
     /** Remove all dots. */
     public void clearDots() {
-        dots.clear();
+      //  dots.clear();
+        dots.removeLast();
         notifyListener();
     }
 

@@ -17,23 +17,28 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.EditText;
+import android.os.AsyncTask;
 
 import com.oreilly.demo.android.pa.uidemo.model.Dot;
+import com.oreilly.demo.android.pa.uidemo.model.DotWorld;
 import com.oreilly.demo.android.pa.uidemo.model.Dots;
+import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
 import com.oreilly.demo.android.pa.uidemo.view.DotView;
 
 
 /** Android UI demo program */
 public class TouchMe extends Activity {
     /** Dot diameter */
-    public static final int DOT_DIAMETER = 6;
+    public static final int DOT_DIAMETER = 80;
 
     /** Listen for taps. */
     private static final class TrackingTouchListener implements View.OnTouchListener {
         private final Dots mDots;
+       // private final Dot mDot;
         private List<Integer> tracks = new ArrayList<>();
 
         TrackingTouchListener(final Dots dots) { mDots = dots; }
+       // TrackingTouchListener(final Dots dots) { mDot = dots; }
 
         @Override public boolean onTouch(final View v, final MotionEvent evt) {
             final int action = evt.getAction();
@@ -56,12 +61,12 @@ public class TouchMe extends Activity {
                     for (Integer i: tracks) {
                         final int idx = evt.findPointerIndex(i);
                         for (int j = 0; j < n; j++) {
-                            addDot(
-                                mDots,
-                                evt.getHistoricalX(idx, j),
-                                evt.getHistoricalY(idx, j),
-                                evt.getHistoricalPressure(idx, j),
-                                evt.getHistoricalSize(idx, j));
+                           // addDot(
+                               // mDots,
+                               // evt.getHistoricalX(idx, j),
+                               // evt.getHistoricalY(idx, j),
+                               // evt.getHistoricalPressure(idx, j),
+                               // evt.getHistoricalSize(idx, j));
                         }
                     }
                     break;
@@ -73,12 +78,12 @@ public class TouchMe extends Activity {
 
             for (final Integer i: tracks) {
                 final int idx = evt.findPointerIndex(i);
-                addDot(
-                    mDots,
-                    evt.getX(idx),
-                    evt.getY(idx),
-                    evt.getPressure(idx),
-                    evt.getSize(idx));
+              //  addDot(
+                   // mDots,
+                   // evt.getX(idx),
+                   // evt.getY(idx),
+                   // evt.getPressure(idx),
+                   // evt.getSize(idx));
             }
 
             return true;
@@ -86,11 +91,11 @@ public class TouchMe extends Activity {
 
         private void addDot(
                 final Dots dots,
-                final float x,
-                final float y,
-                final float p,
-                final float s) {
-            dots.addDot(x, y, Color.CYAN, (int) ((p + 0.5) * (s + 0.5) * DOT_DIAMETER));
+                final int x,
+                final int y,
+                final int p,
+                final int s) {
+            dots.addDot(x, y);
         }
     }
 
@@ -105,6 +110,10 @@ public class TouchMe extends Activity {
     /** The dot generator */
     private Timer dotGenerator;
 
+    int dotcount =0 ;
+
+
+
     /** Called when the activity is first created. */
     @Override public void onCreate(final Bundle state) {
         super.onCreate(state);
@@ -115,6 +124,7 @@ public class TouchMe extends Activity {
         // find the dots view
         dotView = (DotView) findViewById(R.id.dots);
         dotView.setDots(dotModel);
+
 
         dotView.setOnCreateContextMenuListener(this);
         dotView.setOnTouchListener(new TrackingTouchListener(dotModel));
@@ -136,31 +146,90 @@ public class TouchMe extends Activity {
                     return false;
             }
 
-            makeDot(dotModel, dotView, color);
+           // makeDot(dotModel, dotView, color);
 
             return true;
         });
 
         // wire up the controller
-        findViewById(R.id.button1).setOnClickListener((final View v) ->
-            makeDot(dotModel, dotView, Color.RED)
-        );
-        findViewById(R.id.button2).setOnClickListener((final View v) ->
-            makeDot(dotModel, dotView, Color.GREEN)
-        );
-
+       // findViewById(R.id.button1).setOnClickListener((final View v) ->
+           // makeDot(dotModel, dotView, Color.RED)
+      //  );
+       // findViewById(R.id.button2).setOnClickListener((final View v) ->
+           // makeDot(dotModel, dotView, Color.GREEN)
+       // );
+/*
         final EditText tb1 = (EditText) findViewById(R.id.text1);
         final EditText tb2 = (EditText) findViewById(R.id.text2);
         dotModel.setDotsChangeListener((final Dots dots) -> {
             final Dot d = dots.getLastDot();
             tb1.setText((null == d) ? "" : String.valueOf(d.getX()));
             tb2.setText((null == d) ? "" : String.valueOf(d.getY()));
-            dotView.invalidate();
-        });
+ */           dotView.invalidate();
+       // });
     }
 
     @Override public void onResume() {
         super.onResume();
+
+        Dot dotArr[][] = new Dot[7][5];
+        int x, y;
+        for(int i=0; i< dotArr.length;i++) {
+            x = i;
+            for (int j = 0; j < dotArr[0].length; j++) {
+                y = j;
+                dotArr[i][j] = new Dot(x, y);
+            }
+        }
+
+            for(int i=0; i< dotArr.length;i++) {
+                 for (int j = 0; j < dotArr[0].length; j++) {
+                     System.out.println("dotArr[" + i + "][" + j+"]" + dotArr[i][j].getX() +dotArr[i][j].getY() );
+                }
+            }
+
+          DotWorld world= new DotWorld(dotArr);
+
+             List<Dot> neihbour = new ArrayList<Dot>();
+                neihbour = dotArr[3][4].getNeighbors();
+        System.out.println("the 1st neihbour is:" + neihbour.get(0).getX()+neihbour.get(0).getY());
+        System.out.println("the 2 neihbour is:" + neihbour.get(1).getX()+neihbour.get(1).getY());
+        System.out.println("the 3 neihbour is:" + neihbour.get(2).getX()+neihbour.get(2).getY());
+
+       // for(int i=0; i< 1;i++) {
+            //for (int j = 0; j < 2; j++) {
+
+                new MoveTask().execute(dotArr[2][3]);
+            //}
+                new MoveTask().execute(dotArr[5][0]);
+        //}
+
+
+/*
+        // create cells according to map
+        Cell[][] cells = new Cell[7][5];
+        for (int i = 0; i < 7; i ++) {
+            cells[i] = new Cell[5];
+            for (int j = 0; j < 5; j ++) {
+                cells[i][j] = new Open() {
+                };
+            }
+        }
+
+
+        ArrayList<LiveMonster> monsters = new ArrayList<LiveMonster>();
+        DotWorld world = new DotWorld(cells);
+        for (int i=0; i<2; i++) {
+            monsters.add(new LiveMonster());
+            world.addMonster(monsters.get(i), i, i);
+            //displayMonster(monsters.get(i), i, i);
+        }
+
+        for (LiveMonster m : monsters) {
+            m.start();
+        }
+
+        /*
         if (dotGenerator == null) {
             dotGenerator = new Timer();
             // generate new dots, one every two seconds
@@ -169,10 +238,22 @@ public class TouchMe extends Activity {
                 public void run() {
                     // must invoke makeDot on the UI thread to avoid
                     // ConcurrentModificationException on list of dots
-                    runOnUiThread(() -> makeDot(dotModel, dotView, Color.BLACK));
+                    runOnUiThread(() -> makeDot(dotModel, dotView, Color.GREEN));
+                    //dotcount++;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    runOnUiThread(() ->dotModel.clearDots());
+                     // runOnUiThread(() -> makeDot(dotModel, dotView, Color.GREEN));
+                   // if(dotcount==1)
+                       // dotGenerator.cancel();
                 }
-            }, /*initial delay*/ 0, /*periodic delay*/ 2000);
-        }
+            }, /*initial delay*/ //0, /*periodic delay*/ 2000);
+       // }
+
+
     }
 
     @Override public void onPause() {
@@ -193,7 +274,7 @@ public class TouchMe extends Activity {
     @Override public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_clear:
-                dotModel.clearDots();
+               // dotModel.clearDots();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -212,7 +293,7 @@ public class TouchMe extends Activity {
     @Override public boolean onContextItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                dotModel.clearDots();
+              //  dotModel.clearDots();
                 return true;
             default:
                 return false;
@@ -222,14 +303,79 @@ public class TouchMe extends Activity {
     /**
      * @param dots the dots we're drawing
      * @param view the view in which we're drawing dots
-     * @param color the color of the dot
      */
-    void makeDot(final Dots dots, final DotView view, final int color) {
-        final int pad = (DOT_DIAMETER + 2) * 2;
-        dots.addDot(
-            DOT_DIAMETER + (rand.nextFloat() * (view.getWidth() - pad)),
-            DOT_DIAMETER + (rand.nextFloat() * (view.getHeight() - pad)),
-            color,
-            DOT_DIAMETER);
-    }
+    void makeDot(final Dots dots, final DotView view) {
+        System.out.println("enter makedot");
+       // dotView.invalidate();
+        if(dots.getLastDot()!=null)
+            dots.clearDots();
+         //dots.addDot();
+       }
+
+    //}
+
+    void makeDot2(final Dots dots, final DotView view) {
+        int x, y;
+      //  for(int i=0; i< 7;i++) {
+          //  x = i;
+            // for(int j=0; j<6;j++) {
+            // y = j;
+        if(dots.getLastDot()!=null)
+        dots.clearDots();
+            dots.addDot(rand.nextInt(5), 3);
+       // }
+
+
+   }
+
+
+
+    class  MoveTask extends AsyncTask<Dot, Dot, Dot>{
+
+
+        @Override
+        protected void onProgressUpdate(Dot...dot) {
+           //makeDot(dots[0], dotView);
+            if(dotModel.getLastDot()!=null)
+                dotModel.clearDots();
+            System.out.println("last dot:" + dot[0].getX() + "," + dot[0].getY());
+            dotModel.addDot(dot[0].getX(),dot[0].getY());
+            dotView.invalidate();
+        };
+        protected void onPostExecute(String result) {
+
+        }
+        @Override
+        protected Dot doInBackground(Dot... dot) {
+            LiveMonster lm= new LiveMonster(dot[0]);
+          while (!this.isCancelled()) {
+                try {
+                    lm.getDot().randomNeighbor().enter(lm);
+                    // lm.getDot().enter(lm);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+               }
+
+            System.out.println("now we get a new dot:"  + lm.getDot().randomNeighbor().getX() + "," + lm.getDot().randomNeighbor().getY());
+            System.out.println("dot:" + lm.getDot().getX() + "," + lm.getDot().getY());
+            Dot ndot = lm.getDot();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
+            publishProgress(ndot);
+
+               }
+                return null;
+            }
+
+        }
+
+
+
+
+
+
+
 }
