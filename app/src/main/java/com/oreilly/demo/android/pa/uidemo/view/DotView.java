@@ -11,6 +11,7 @@ import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
 import android.graphics.Rect;
+import java.util.Random;
 
 import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.model.Dot;
@@ -64,6 +65,22 @@ public class DotView extends View {
 
     public void setDots (final Dots  dots ) { this.dots  = dots ; }
 
+    public int getRandomColor(){
+        Random r = new Random();
+
+        int i = r.nextInt()%2;
+
+        switch (i) {
+            case 0:
+                return Color.GREEN;
+            case 1:
+                return Color.RED;
+            default:
+                return Color.BLACK;
+        }
+
+    }
+
     /**
      * This Method draws grid on the display and monsters
      * @see android.view.View#onDraw(android.graphics.Canvas)
@@ -97,13 +114,15 @@ public class DotView extends View {
 
 
 
-       System.out.println("dots is null?"+ dots.getDots().size());
+       System.out.println("dots is null?" + dots.getDots().size());
 
           if (null == dots) { return; }
  // if(dots.getDots().size()==2){
         paint.setStyle(Style.FILL);
         for (final Dot dot : dots.getDots()) {
-            paint.setColor(Color.GREEN);
+
+            paint.setColor(getRandomColor());
+
             //Rect rec = new Rect(dot.getY() * (int)addx -10,dot.getX() *(int) addy-10,dot.getY() * (int)addx + (int)addx+10,dot.getX() * (int)addy + (int)addy+10);
            // setClipBounds (rec);
             canvas.drawRect(
