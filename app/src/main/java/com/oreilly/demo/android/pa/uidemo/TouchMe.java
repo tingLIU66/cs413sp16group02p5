@@ -1,6 +1,7 @@
 package com.oreilly.demo.android.pa.uidemo;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Timer;
@@ -9,6 +10,7 @@ import java.util.TimerTask;
 import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -103,6 +105,7 @@ public class TouchMe extends Activity {
 
     /** The application model */
     private final Dots dotModel = new Dots();
+    private final Dots dotModel1 = new Dots();
 
     /** The application view */
     private DotView dotView;
@@ -124,10 +127,12 @@ public class TouchMe extends Activity {
         // find the dots view
         dotView = (DotView) findViewById(R.id.dots);
         dotView.setDots(dotModel);
+        dotView.setDots(dotModel1);
 
 
         dotView.setOnCreateContextMenuListener(this);
         dotView.setOnTouchListener(new TrackingTouchListener(dotModel));
+        dotView.setOnTouchListener(new TrackingTouchListener(dotModel1));
 
         dotView.setOnKeyListener((final View v, final int keyCode, final KeyEvent event) -> {
             if (KeyEvent.ACTION_DOWN != event.getAction()) {
@@ -171,7 +176,7 @@ public class TouchMe extends Activity {
 
     @Override public void onResume() {
         super.onResume();
-
+       //initial the monsters
         Dot dotArr[][] = new Dot[7][5];
         int x, y;
         for(int i=0; i< dotArr.length;i++) {
@@ -179,6 +184,7 @@ public class TouchMe extends Activity {
             for (int j = 0; j < dotArr[0].length; j++) {
                 y = j;
                 dotArr[i][j] = new Dot(x, y);
+                dotModel.addDot(x, y);
             }
         }
 
@@ -187,71 +193,10 @@ public class TouchMe extends Activity {
                      System.out.println("dotArr[" + i + "][" + j+"]" + dotArr[i][j].getX() +dotArr[i][j].getY() );
                 }
             }
-
+         //set neighbours of one monter
           DotWorld world= new DotWorld(dotArr);
 
-             List<Dot> neihbour = new ArrayList<Dot>();
-                neihbour = dotArr[3][4].getNeighbors();
-        System.out.println("the 1st neihbour is:" + neihbour.get(0).getX()+neihbour.get(0).getY());
-        System.out.println("the 2 neihbour is:" + neihbour.get(1).getX()+neihbour.get(1).getY());
-        System.out.println("the 3 neihbour is:" + neihbour.get(2).getX()+neihbour.get(2).getY());
-
-       // for(int i=0; i< 1;i++) {
-            //for (int j = 0; j < 2; j++) {
-
-                new MoveTask().execute(dotArr[2][3]);
-            //}
-                new MoveTask().execute(dotArr[5][0]);
-        //}
-
-
-/*
-        // create cells according to map
-        Cell[][] cells = new Cell[7][5];
-        for (int i = 0; i < 7; i ++) {
-            cells[i] = new Cell[5];
-            for (int j = 0; j < 5; j ++) {
-                cells[i][j] = new Open() {
-                };
-            }
-        }
-
-
-        ArrayList<LiveMonster> monsters = new ArrayList<LiveMonster>();
-        DotWorld world = new DotWorld(cells);
-        for (int i=0; i<2; i++) {
-            monsters.add(new LiveMonster());
-            world.addMonster(monsters.get(i), i, i);
-            //displayMonster(monsters.get(i), i, i);
-        }
-
-        for (LiveMonster m : monsters) {
-            m.start();
-        }
-
-        /*
-        if (dotGenerator == null) {
-            dotGenerator = new Timer();
-            // generate new dots, one every two seconds
-            dotGenerator.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    // must invoke makeDot on the UI thread to avoid
-                    // ConcurrentModificationException on list of dots
-                    runOnUiThread(() -> makeDot(dotModel, dotView, Color.GREEN));
-                    //dotcount++;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    runOnUiThread(() ->dotModel.clearDots());
-                     // runOnUiThread(() -> makeDot(dotModel, dotView, Color.GREEN));
-                   // if(dotcount==1)
-                       // dotGenerator.cancel();
-                }
-            }, /*initial delay*/ //0, /*periodic delay*/ 2000);
-       // }
+          new MoveTask().execute(dotArr);
 
 
     }
@@ -300,82 +245,59 @@ public class TouchMe extends Activity {
         }
     }
 
-    /**
-     * @param dots the dots we're drawing
-     * @param view the view in which we're drawing dots
-     */
-    void makeDot(final Dots dots, final DotView view) {
-        System.out.println("enter makedot");
-       // dotView.invalidate();
-        if(dots.getLastDot()!=null)
-            dots.clearDots();
-         //dots.addDot();
-       }
-
-    //}
-
-    void makeDot2(final Dots dots, final DotView view) {
-        int x, y;
-      //  for(int i=0; i< 7;i++) {
-          //  x = i;
-            // for(int j=0; j<6;j++) {
-            // y = j;
-        if(dots.getLastDot()!=null)
-        dots.clearDots();
-            dots.addDot(rand.nextInt(5), 3);
-       // }
-
-
-   }
-
-
-
-    class  MoveTask extends AsyncTask<Dot, Dot, Dot>{
-
-
+    class  MoveTask extends AsyncTask<Dot[][], Dots, Dot> {
+        /**
+         * @param dots the monsters we're drawing
+         *
+         */
         @Override
-        protected void onProgressUpdate(Dot...dot) {
-           //makeDot(dots[0], dotView);
-            if(dotModel.getLastDot()!=null)
-                dotModel.clearDots();
-            System.out.println("last dot:" + dot[0].getX() + "," + dot[0].getY());
-            dotModel.addDot(dot[0].getX(),dot[0].getY());
+        protected void onProgressUpdate(Dots... dots) {
+
             dotView.invalidate();
-        };
+
+        }
+
         protected void onPostExecute(String result) {
 
         }
-        @Override
-        protected Dot doInBackground(Dot... dot) {
-            LiveMonster lm= new LiveMonster(dot[0]);
-          while (!this.isCancelled()) {
-                try {
-                    lm.getDot().randomNeighbor().enter(lm);
-                    // lm.getDot().enter(lm);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-               }
 
-            System.out.println("now we get a new dot:"  + lm.getDot().randomNeighbor().getX() + "," + lm.getDot().randomNeighbor().getY());
-            System.out.println("dot:" + lm.getDot().getX() + "," + lm.getDot().getY());
-            Dot ndot = lm.getDot();
+        /**
+         * This method makes the monsters to  move around among adjacent squares at random
+         * @param dotarr
+         * @return Dot
+         */
+        @Override
+         protected Dot doInBackground(Dot[][]... dotarr) {
+
+                List<LiveMonster> monsterlist= new LinkedList<LiveMonster>();
+          //initial k monsters
+               for(int i=0; i< 5;i++) {
+                  for (int j = 0; j < 4; j++) {
+                      LiveMonster m = new LiveMonster(dotarr[0][i][j]);
+                      monsterlist.add(m);
+                  }}
+
+            while (!this.isCancelled()) {
+                for(LiveMonster lm:monsterlist){
+                    try {
+                        lm.getDot().randomNeighbor().enter(lm);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                dotModel1.addDot(lm.getDot().getX(), lm.getDot().getY());
+
                 try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ex) {
+                    Thread.sleep(5);
+                    } catch (InterruptedException ex) {
                     ex.printStackTrace();
                 }
-            publishProgress(ndot);
-
-               }
+                }
+                  publishProgress(dotModel1);
+            }
                 return null;
+
             }
 
         }
-
-
-
-
-
-
-
 }

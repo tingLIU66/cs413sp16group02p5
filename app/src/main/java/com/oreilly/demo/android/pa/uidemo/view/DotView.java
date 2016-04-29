@@ -2,13 +2,17 @@ package com.oreilly.demo.android.pa.uidemo.view;
 
 import android.content.Context;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
+import android.graphics.Rect;
 
+import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.model.Dot;
 import com.oreilly.demo.android.pa.uidemo.model.Dots;
 import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
@@ -66,6 +70,8 @@ public class DotView extends View {
      */
     @Override public void onDraw(final Canvas canvas) {
         System.out.println("enter onDraw");
+      //  Rect rec = new Rect();
+
         float addx = getWidth()/5;
         float addy = getHeight()/7;
         float ptsx[] = {addx,     0, addx,     getHeight(),
@@ -90,11 +96,16 @@ public class DotView extends View {
         canvas.drawLines(ptsy, paint);
 
 
+
+       System.out.println("dots is null?"+ dots.getDots().size());
+
           if (null == dots) { return; }
-       //  dots.addDot(1,3);
+ // if(dots.getDots().size()==2){
         paint.setStyle(Style.FILL);
         for (final Dot dot : dots.getDots()) {
             paint.setColor(Color.GREEN);
+            //Rect rec = new Rect(dot.getY() * (int)addx -10,dot.getX() *(int) addy-10,dot.getY() * (int)addx + (int)addx+10,dot.getX() * (int)addy + (int)addy+10);
+           // setClipBounds (rec);
             canvas.drawRect(
                     dot.getY() * addx,
                     dot.getX() * addy,
@@ -102,6 +113,12 @@ public class DotView extends View {
                     dot.getX() * addy + addy-8,
                     paint);
         }
+
+       // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+// 绘图
+      //  canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
+
+        dots.clearDots();//}
     }
 }
 

@@ -29,7 +29,7 @@ public final class Dot {
     public int getY() { return y; }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
-    boolean DEBUG = true;
+    boolean DEBUG = false;
 
     private static Random random = new Random(System.currentTimeMillis());
 
@@ -46,7 +46,7 @@ public final class Dot {
     /**
      * A semaphore to control entry into this limited-capacity cell.
      */
-    protected Semaphore sema = new Semaphore(1);;
+    protected Semaphore sema = new Semaphore(10000);
 
     /**
      * Constructs a cell with the given capacity.
@@ -151,7 +151,7 @@ public final class Dot {
 
     public synchronized Dot randomNeighbor() {
         int size = neighbors.size();
-        System.out.println("Size=:"+size);
+       // System.out.println("Size=:"+size);
         return size == 0 ? null : (Dot) neighbors.get(random.nextInt(size));
     }
 }

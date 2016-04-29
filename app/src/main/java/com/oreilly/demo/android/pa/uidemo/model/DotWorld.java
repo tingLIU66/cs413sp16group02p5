@@ -44,7 +44,7 @@ public class DotWorld {
           }
           List<Dot> neihbour = new ArrayList<Dot>();
           neihbour = grid[i][j].getNeighbors();
-          System.out.println("the 1st neihbour of Dot["+i+"]"+"["+j+"]is:" + neihbour.get(0).getX()+neihbour.get(0).getY());
+         // System.out.println("the 1st neihbour of Dot["+i+"]"+"["+j+"]is:" + neihbour.get(0).getX()+neihbour.get(0).getY());
 
         }
       }

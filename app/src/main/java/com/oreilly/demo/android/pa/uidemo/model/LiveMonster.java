@@ -12,7 +12,7 @@ import java.util.concurrent.Future;
  */
 public class LiveMonster  implements Monster, Runnable  {
 
-  boolean DEBUG = true;
+  boolean DEBUG = false;
 
 //////////////////////////////////////////////////////////////
 
@@ -140,13 +140,13 @@ public class LiveMonster  implements Monster, Runnable  {
 
   public void enterDot(DotEvent event) {
     if (event.getMonster() != this) {
-      System.out.println(this + ": hello " + event.getMonster());
+      //System.out.println(this + ": hello " + event.getMonster());
     }
   }
 
   public void leaveDot(DotEvent event) {
     if (event.getMonster() != this) {
-      System.out.println(this + ": goodbye " + event.getMonster());
+     // System.out.println(this + ": goodbye " + event.getMonster());
     }
   }
 }

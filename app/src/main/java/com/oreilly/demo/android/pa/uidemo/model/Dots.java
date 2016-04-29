@@ -41,9 +41,15 @@ public class Dots {
     }
 
     /** Remove all dots. */
-    public void clearDots() {
+    public void clearLastDots() {
       //  dots.clear();
         dots.removeLast();
+        notifyListener();
+    }
+
+    public void clearDots() {
+          dots.clear();
+//        dots.removeLast();
         notifyListener();
     }
 
