@@ -29,7 +29,7 @@ import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
 public class DotView extends View {
 
    private volatile Dots dots;
-
+    private static Random random = new Random(System.currentTimeMillis());
    // private volatile Dot dot;
     private volatile LiveMonster monsters;
   //  private Dots dots = new Dots();
@@ -96,7 +96,7 @@ public class DotView extends View {
         }
     }
 
-
+/*
     public int getRandomColor(){
         RandomCollection<Integer> colors = new RandomCollection<Integer>();
 
@@ -107,6 +107,12 @@ public class DotView extends View {
         return color;
     }
 
+*/
+
+    public void setCenterDots(){
+
+
+    }
     /**
      * This Method draws grid on the display and monsters
      * @see android.view.View#onDraw(android.graphics.Canvas)
@@ -140,6 +146,7 @@ public class DotView extends View {
 
 
 
+
        System.out.println("dots is null?" + dots.getDots().size());
 
           if (null == dots) { return; }
@@ -147,21 +154,25 @@ public class DotView extends View {
         paint.setStyle(Style.FILL);
         for (final Dot dot : dots.getDots()) {
 
-            paint.setColor(getRandomColor());
+           int  n = random.nextInt(2);
+             if(n==0)
+                paint.setColor(Color.GREEN);
+             if(n==1)
+                 paint.setColor(Color.YELLOW);
 
             //Rect rec = new Rect(dot.getY() * (int)addx -10,dot.getX() *(int) addy-10,dot.getY() * (int)addx + (int)addx+10,dot.getX() * (int)addy + (int)addy+10);
            // setClipBounds (rec);
             canvas.drawRect(
-                    dot.getY() * addx,
-                    dot.getX() * addy,
-                    dot.getY() * addx + addx-8,
-                    dot.getX() * addy + addy-8,
+                    dot.getY() * addx+50,
+                    dot.getX() * addy+50,
+                    dot.getY() * addx + addx-50,
+                    dot.getX() * addy + addy-50,
                     paint);
         }
 
        // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
 // 绘图
-      //  canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
+       // canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
 
         dots.clearDots();//}
     }

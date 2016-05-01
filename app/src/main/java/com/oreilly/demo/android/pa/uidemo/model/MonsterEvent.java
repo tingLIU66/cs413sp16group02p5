@@ -7,9 +7,9 @@ import java.util.EventObject;
  * is usually the source of the event.
  * @see Cell
  * @see Monster
- * @see DotListener
+ * @see MonsterListener
  */
-public class DotEvent extends EventObject {
+public class MonsterEvent extends EventObject {
 
   private static final long serialVersionUID = 6621950138682436187L;
 
@@ -21,7 +21,7 @@ public class DotEvent extends EventObject {
   /**
    * This constructor builds a cell event involving the specified actor.
    */
-  public DotEvent(Object source, Monster monster) {
+  public MonsterEvent(Object source, Monster monster) {
     super(source);
     this.monster = monster;
   }

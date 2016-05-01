@@ -89,7 +89,7 @@ public final class Dot {
             monster.setDot(this);
             addOccupant(monster);
             // fire event to tell all occupants of this cell about the new arrival
-            enterDot(new DotEvent(this, monster));
+            enterDot(new MonsterEvent(this, monster));
            // getView().update();
         } else {
             if (DEBUG) System.out.println(monster + " staying in " + this);
@@ -100,18 +100,18 @@ public final class Dot {
         if (DEBUG) System.out.println(monster + " leaving " + this);
         removeOccupant(monster);
         // fire event to tell all occupants of this cell about the departure
-        leaveDot(new DotEvent(this, monster));
+        leaveDot(new MonsterEvent(this, monster));
         // release the space that was occupied by the monster who just left
         sema.release();
        // getView().update();
     }
 
     /**
-     * This method fires an <code>DotEvent.enterCell</code> event
+     * This method fires an <code>MonsterEvent.enterCell</code> event
      * to all occupants of this cell.
      */
     @SuppressWarnings("unchecked")
-    public void enterDot(final DotEvent event) {
+    public void enterDot(final MonsterEvent event) {
         List<Monster> currentOccupants;
         synchronized (this) {
             currentOccupants = (List<Monster>) this.occupants.clone();
@@ -122,11 +122,11 @@ public final class Dot {
     }
 
     /**
-     * This method fires an <code>DotEvent.leaveCell</code> event
+     * This method fires an <code>MonsterEvent.leaveCell</code> event
      * to all occupants of this cell.
      */
     @SuppressWarnings("unchecked")
-    public void leaveDot(final DotEvent event) {
+    public void leaveDot(final MonsterEvent event) {
         List<Monster> currentOccupants;
         synchronized (this) {
             currentOccupants = (List<Monster>) this.occupants.clone();

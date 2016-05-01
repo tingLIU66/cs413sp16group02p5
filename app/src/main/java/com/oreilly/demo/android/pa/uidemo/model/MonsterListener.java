@@ -4,21 +4,21 @@ import java.util.EventListener;
 
 /**
  * A listener to cell events.
- * @see DotEvent
+ * @see MonsterEvent
  * @see Monster
  */
-  public interface DotListener extends EventListener {
+  public interface MonsterListener extends EventListener {
 
   /**
    * This method indicates that an actor has entered a cell. 
    * May be called from any thread, usually not the Swing thread.
    */
-  void enterDot(DotEvent event);
+  void enterDot(MonsterEvent event);
 
   /**
    * This method indicates that an actor has left a cell.
    * May be called from any thread, usually not the Swing thread.
    */
 
-  void leaveDot(DotEvent event);
+  void leaveDot(MonsterEvent event);
 }

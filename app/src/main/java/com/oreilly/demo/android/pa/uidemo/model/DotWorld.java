@@ -6,8 +6,6 @@ import java.util.List;
 /**
  * This class represents a world consisting of a rectangular grid
  * of cells.
-
- * @see Cell
  */
 public class DotWorld {
 
@@ -42,10 +40,6 @@ public class DotWorld {
             grid[i][j].addNeighbor(grid[i+1][j]);
             if (j < cols - 1) grid[i][j].addNeighbor(grid[i+1][j+1]);
           }
-          List<Dot> neihbour = new ArrayList<Dot>();
-          neihbour = grid[i][j].getNeighbors();
-         // System.out.println("the 1st neihbour of Dot["+i+"]"+"["+j+"]is:" + neihbour.get(0).getX()+neihbour.get(0).getY());
-
         }
       }
     }

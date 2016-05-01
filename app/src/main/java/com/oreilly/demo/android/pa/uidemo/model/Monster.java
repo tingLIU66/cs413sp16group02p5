@@ -6,7 +6,7 @@ package com.oreilly.demo.android.pa.uidemo.model;
  * @see Cell
  * @see World
  */
-public interface Monster extends DotListener {
+public interface Monster extends MonsterListener {
 
   /**
    * This method sets the cell that this monster currently occupies.

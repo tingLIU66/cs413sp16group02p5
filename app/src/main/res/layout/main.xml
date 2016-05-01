@@ -21,23 +21,43 @@
       android:orientation="horizontal"
       android:background="@color/grey"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="match_parent">
 
-    <EditText
+    <TextView
         android:id="@+id/text1"
-        android:text="@string/defaultText"
+        android:text="Time:"
         android:focusable="false"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:textSize="30sp"
         android:layout_weight="1"/>
 
-    <EditText
+      <TextView
+          android:id="@+id/text3"
+
+          android:focusable="false"
+          android:layout_height="wrap_content"
+          android:layout_width="0dp"
+          android:textSize="30sp"
+          android:layout_weight="1"/>
+
+    <TextView
         android:id="@+id/text2"
-        android:text="@string/defaultText"
+        android:text="Score:"
         android:focusable="false"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:textSize="30sp"
         android:layout_weight="1"/>
+
+      <TextView
+          android:id="@+id/text4"
+          android:text="0"
+          android:focusable="false"
+          android:layout_height="wrap_content"
+          android:layout_width="0dp"
+          android:textSize="30sp"
+          android:layout_weight="1"/>
   </LinearLayout>
 
   <LinearLayout
@@ -48,18 +68,13 @@
 
     <Button
         android:id="@+id/button1"
-        android:text="@string/labelRed"
-        android:textColor="@color/red"
+        android:text="Start"
+        android:textSize="30sp"
+        android:onClick="onClickStart"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:layout_weight="1"/>
 
-    <Button
-        android:id="@+id/button2"
-        android:text="@string/labelGreen"
-        android:textColor="@color/green"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        android:layout_weight="1"/>
+
   </LinearLayout>
 </LinearLayout>
