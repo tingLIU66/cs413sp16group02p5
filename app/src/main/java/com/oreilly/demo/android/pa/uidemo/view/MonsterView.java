@@ -2,23 +2,20 @@ package com.oreilly.demo.android.pa.uidemo.view;
 
 import android.content.Context;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
-import android.graphics.Rect;
+
 import java.util.NavigableMap;
 import java.util.Random;
 import java.util.TreeMap;
 
-import com.oreilly.demo.android.pa.uidemo.R;
 import com.oreilly.demo.android.pa.uidemo.model.Dot;
-import com.oreilly.demo.android.pa.uidemo.model.Dots;
-import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
+import com.oreilly.demo.android.pa.uidemo.model.Monster;
+import com.oreilly.demo.android.pa.uidemo.model.Monsters;
 
 
 /**
@@ -26,17 +23,17 @@ import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
  *
  * @author <a href="mailto:android@callmeike.net">Blake Meike</a>
  */
-public class DotView extends View {
+public class MonsterView extends View {
 
-   private volatile Dots dots;
+   //private volatile Dots dots;
     private static Random random = new Random(System.currentTimeMillis());
    // private volatile Dot dot;
-    private volatile LiveMonster monsters;
+    private volatile Monsters monsters;
   //  private Dots dots = new Dots();
     /**
      * @param context the rest of the application
      */
-    public DotView(final Context context) {
+    public MonsterView(final Context context) {
         super(context);
         setFocusableInTouchMode(true);
     }
@@ -45,7 +42,7 @@ public class DotView extends View {
      * @param context
      * @param attrs
      */
-    public DotView(final Context context, final AttributeSet attrs) {
+    public MonsterView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         setFocusableInTouchMode(true);
     }
@@ -55,17 +52,18 @@ public class DotView extends View {
      * @param attrs
      * @param defStyle
      */
-    public DotView(final Context context, final AttributeSet attrs, final int defStyle) {
+    public MonsterView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
         setFocusableInTouchMode(true);
     }
 
     /**
-     * @param dots
+     * @param
      */
     //public void setDots(final Dots dots) { this.dots = dots; }
 
-    public void setDots (final Dots  dots ) { this.dots  = dots ; }
+    //public void setDots (final Dots  dots ) { this.dots  = dots ; }
+    public void setMonsters (final Monsters  monsters ) { this.monsters  = monsters ; }
 
     public class RandomCollection<E> {
         private final NavigableMap<Double, E> map = new TreeMap<Double, E>();
@@ -147,34 +145,32 @@ public class DotView extends View {
 
 
 
-       System.out.println("dots is null?" + dots.getDots().size());
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-          if (null == dots) { return; }
- // if(dots.getDots().size()==2){
+
+        System.out.println("monsters is null?" + monsters.getMonsters().size());
+
+        if (null == monsters) { return; }
+        // if(dots.getDots().size()==2){
         paint.setStyle(Style.FILL);
-        for (final Dot dot : dots.getDots()) {
+        for (final Monster monster : monsters.getMonsters()) {
+            paint.setColor(monster.getColor());
+            Dot dot = monster.getDot();
+         /*   canvas.drawRect(
+                    monster.getDot().getY() * addx+50,
+                    monster.getDot().getX() * addy+50,
+                    monster.getDot().getY() * addx + addx-50,
+                    monster.getDot().getX() * addy + addy-50,
+                    paint);*/
 
-           int  n = random.nextInt(2);
-             if(n==0)
-                paint.setColor(Color.GREEN);
-             if(n==1)
-                 paint.setColor(Color.YELLOW);
-
-            //Rect rec = new Rect(dot.getY() * (int)addx -10,dot.getX() *(int) addy-10,dot.getY() * (int)addx + (int)addx+10,dot.getX() * (int)addy + (int)addy+10);
-           // setClipBounds (rec);
-            canvas.drawRect(
-                    dot.getY() * addx+50,
-                    dot.getX() * addy+50,
-                    dot.getY() * addx + addx-50,
-                    dot.getX() * addy + addy-50,
-                    paint);
+            canvas.drawCircle(monster.getDot().getX() * addx + addx/2,monster.getDot().getY()*addy+addy/2,50,paint);
         }
 
-       // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+        // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
 // 绘图
-       // canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
+        // canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
 
-        dots.clearDots();//}
+        monsters.clearMonsters();//}
     }
 }
 

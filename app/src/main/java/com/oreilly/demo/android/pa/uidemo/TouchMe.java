@@ -8,7 +8,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.os.AsyncTask;
@@ -16,19 +15,20 @@ import android.widget.TextView;
 
 import com.oreilly.demo.android.pa.uidemo.model.Dot;
 import com.oreilly.demo.android.pa.uidemo.model.DotWorld;
-import com.oreilly.demo.android.pa.uidemo.model.Dots;
-import com.oreilly.demo.android.pa.uidemo.model.LiveMonster;
-import com.oreilly.demo.android.pa.uidemo.view.DotView;
+import com.oreilly.demo.android.pa.uidemo.model.Monster;
+import com.oreilly.demo.android.pa.uidemo.model.Monsters;
+import com.oreilly.demo.android.pa.uidemo.view.MonsterView;
 
 /** Android UI demo program */
 public class TouchMe extends Activity {
 
     /** Listen for taps. */
     private static final class TrackingTouchListener implements View.OnTouchListener {
-        private final Dots mDots;
-       // private final Dot mDot;
+       // private final Dots mDots;
+        private final Monsters mMonsters;
 
-         TrackingTouchListener(final Dots dots) { mDots = dots; }
+        // TrackingTouchListener(final Dots dots) { mDots = dots; }
+        TrackingTouchListener(final Monsters monsters) { mMonsters = monsters; }
 
             @Override public boolean onTouch(final View v, final MotionEvent evt) {
             final int action = evt.getAction();
@@ -37,7 +37,7 @@ public class TouchMe extends Activity {
                             evt.getX();
                             evt.getY();
                     if (monsterlist.size()!=0){
-                     /*   Iterator<LiveMonster> i = monsterlist.iterator();
+                     /*   Iterator<Monster> i = monsterlist.iterator();
                         while (i.hasNext()) {
                             if (i.next().getDot().getX()==1) {
                                 i.remove(); //
@@ -58,14 +58,14 @@ public class TouchMe extends Activity {
     }
 
     private final Random rand = new Random();
-   static volatile LinkedList<LiveMonster> monsterlist= new LinkedList<LiveMonster>();
+   static volatile LinkedList<Monster> monsterlist= new LinkedList<Monster>();
 
     /** The application model */
-    private final Dots dotModel = new Dots();
-    private final Dots dotModel1 = new Dots();
 
+    private final Monsters monsterModel = new Monsters();
+    Dot dotArr[][] = new Dot[7][5];
     /** The application view */
-    private DotView dotView;
+    private MonsterView monsterView;
 
     /** The dot generator */
     private Timer dotGenerator;
@@ -78,14 +78,13 @@ public class TouchMe extends Activity {
         setContentView(R.layout.main);
 
         // find the dots view
-        dotView = (DotView) findViewById(R.id.dots);
-        dotView.setDots(dotModel);
-        dotView.setDots(dotModel1);
+        monsterView = (MonsterView) findViewById(R.id.dots);
+       // monsterView.setDots(dotModel);
+        monsterView.setMonsters(monsterModel);
 
-        dotView.setOnCreateContextMenuListener(this);
-        dotView.setOnTouchListener(new TrackingTouchListener(dotModel));
-        dotView.setOnTouchListener(new TrackingTouchListener(dotModel1));
-
+        monsterView.setOnCreateContextMenuListener(this);
+       // monsterView.setOnTouchListener(new TrackingTouchListener(dotModel));
+        monsterView.setOnTouchListener(new TrackingTouchListener(monsterModel));
 
         // wire up the controller
         findViewById(R.id.button1).setOnClickListener((final View v) -> {
@@ -96,7 +95,7 @@ public class TouchMe extends Activity {
             cdt = new CountDownTimer(61000, 1000) {
                 @Override
                 public void onTick(long millisUntilFinished) {
-                    tb3.setText(Integer.toString((int) ((millisUntilFinished / 1000)-1)));
+                    tb3.setText(Integer.toString((int) ((millisUntilFinished / 1000)-1))+"s");
                 }
 
                 @Override
@@ -107,23 +106,13 @@ public class TouchMe extends Activity {
                 }
             }.start();
         });
-
      }
 
     @Override
     public void onResume() {
         super.onResume();
-        Dot dotArr[][] = new Dot[7][5];
-        int x, y;
-        for(int i=0; i< dotArr.length;i++) {
-            x = i;
-            for (int j = 0; j < dotArr[0].length; j++) {
-                y = j;
-                dotArr[i][j] = new Dot(x, y);
-                dotModel.addDot(x, y);
-            }
-        }
-//set neighbours of one monter
+        initial();
+       //set neighbours of one monter
         DotWorld world= new DotWorld(dotArr);
         MoveTask mtask = new MoveTask();
         mtask.execute(dotArr);
@@ -136,8 +125,8 @@ public class TouchMe extends Activity {
             dotGenerator = null;
         }
     }
-
-    boolean start = false;
+    private static Random random = new Random(System.currentTimeMillis());
+    private boolean start = false;
     public void isstart(boolean s){
         if (s)
             start = true;
@@ -145,15 +134,28 @@ public class TouchMe extends Activity {
             start = false;
     }
 
-    class  MoveTask extends AsyncTask<Dot[][], Dots, Dot> {
+    public void initial(){
+        int x, y;
+        for(int i=0; i< dotArr.length;i++) {
+            x = i;
+            for (int j = 0; j < dotArr[0].length; j++) {
+                y = j;
+                dotArr[i][j] = new Dot(x, y);
+               // dotModel.addDot(x, y);
+            }
+        }
+
+    }
+
+    class  MoveTask extends AsyncTask<Dot[][], Monsters, Dot> {
         /**
-         * @param dots the monsters we're drawing
+         * @param monsters the monsters we're drawing
          *
          */
         @Override
-        protected void onProgressUpdate(Dots... dots) {
+        protected void onProgressUpdate(Monsters... monsters) {
 
-            dotView.invalidate();
+            monsterView.invalidate();
 
         }
        @Override
@@ -169,15 +171,16 @@ public class TouchMe extends Activity {
         @Override
          protected Dot doInBackground(Dot[][]... dotarr) {
 
-            LinkedList<LiveMonster> newmonsterlist= new LinkedList<LiveMonster>();
+            LinkedList<Monster> newmonsterlist= new LinkedList<Monster>();
             //initial k=i*j monsters
             int p =0;
             for(int i=0; i< 5;i++) {
                 for (int j = 0; j < 4; j++) {
-                    LiveMonster m = new LiveMonster(dotarr[0][i][j],p++,Color.GREEN);
+                    int c= random.nextInt(2);
+                    Monster m = new Monster(dotarr[0][i][j],p++,c==0?Color.GREEN:Color.YELLOW);
                     monsterlist.add(m);
                 }}
-            for(LiveMonster nm:monsterlist){
+            for(Monster nm:monsterlist){
                 System.out.println("monsters:" + nm.getDot().getX()+"-" + nm.getDot().getY()+"-" +nm.getPosition()+"-" +nm.getColor());
             }
 
@@ -186,21 +189,25 @@ public class TouchMe extends Activity {
             while (!this.isCancelled()) {
                 if (start) {
 
-               for(LiveMonster nm:monsterlist){
+               for(Monster nm:monsterlist){
                    newmonsterlist.add(nm);
                }
 
                int n= newmonsterlist.size();
                if(n == 0) break;
 
-                for(LiveMonster lm:newmonsterlist){
+                for(Monster lm:newmonsterlist){
+                    int c= random.nextInt(2);
+                    lm.setColor(c==0?Color.GREEN:Color.YELLOW);
+                    System.out.println("color:"+c);
                     try {
                         lm.getDot().randomNeighbor().enter(lm);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                dotModel1.addDot(lm.getDot().getX(), lm.getDot().getY());
+                   monsterModel.addMonster(lm);
+                //dotModel1.addDot(lm.getDot().getX(), lm.getDot().getY());
 
                 try {
                     if(n>0 && n<10)
@@ -213,7 +220,7 @@ public class TouchMe extends Activity {
                 }
 
                 newmonsterlist.clear();
-                publishProgress(dotModel1);
+                publishProgress(monsterModel);
             }}
                 return null;
 

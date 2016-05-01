@@ -1,32 +1,48 @@
 package com.oreilly.demo.android.pa.uidemo.model;
 
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
+
 /**
- * This interface represents an monster in a world of cells.
- *
- * @see Cell
- * @see World
+ * This abstract class represents a monster with autonomous behavior.
+ * Concrete subclasses should implement the <code>run()</code> method.
  */
-public interface Monster extends MonsterListener {
+public class Monster  {
 
+  boolean DEBUG = false;
   /**
-   * This method sets the cell that this monster currently occupies.
-   * This method is meant to be called by the <code>leave</code> method
-   * in the <code>Cell</code> class.
+   * The cell this monster is currently occupying.
    */
-  void setDot(Dot dot);
+  private Dot currentDot;
+  private int position;
+  private int color;
 
-  /**
-   * This method returns the cell that this monster currently occupies.
-   */
-  Dot getDot();
 
-  /**
-   * This method brings this monster to life.
-   */
-  void start();
+  public Monster(Dot dot, int position, int color){
+    currentDot = dot;
+    this.position = position;
+    this.color = color;
+  }
 
-  /**
-   * This method kills this monster.
-   */
-  void kill();
+
+  public synchronized void setDot(Dot dot) { currentDot = dot; }
+  public synchronized void setPosition(int position) { this.position = position; }
+  public synchronized void setColor(int color) { this.color = color; }
+
+  public synchronized Dot getDot() { return currentDot; }
+  public synchronized int getPosition() { return position; }
+  public synchronized int getColor() { return color; }
+
+///////////////////////////////////////////////////////////////
+  private static Random random = new Random();
+
+  public void start(){}
+
+  public void kill(){}
+
+
+
 }
+

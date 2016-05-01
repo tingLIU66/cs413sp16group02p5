@@ -46,14 +46,8 @@ public final class Dot {
     /**
      * A semaphore to control entry into this limited-capacity cell.
      */
-    protected Semaphore sema = new Semaphore(10000);
+    protected Semaphore sema = new Semaphore(1000);
 
-    /**
-     * Constructs a cell with the given capacity.
-     */
-   // public Dot(int capacity) {
-        //sema
-   // }
 
     /**
      * This method adds a neighbor to this cell in a thread-safe manner.
@@ -117,7 +111,7 @@ public final class Dot {
             currentOccupants = (List<Monster>) this.occupants.clone();
         }
         for (Monster a : currentOccupants) {
-            a.enterDot(event);
+           // a.enterDot(event);
         }
     }
 
@@ -133,7 +127,7 @@ public final class Dot {
         }
         for (Monster a : currentOccupants) {
             //a.enterCell(event);
-            a.leaveDot(event);
+          //  a.leaveDot(event);
         }
     }
 
