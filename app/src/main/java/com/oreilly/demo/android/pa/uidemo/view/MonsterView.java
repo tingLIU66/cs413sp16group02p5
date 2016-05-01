@@ -137,7 +137,6 @@ public class MonsterView extends View {
         paint.setStyle(Style.STROKE);
         paint.setStrokeWidth(8);
         paint.setColor(hasFocus() ? Color.WHITE : Color.GRAY);
-        paint.setShadowLayer(10f, 3f, 3f, Color.BLACK);
         canvas.drawRect(0, 0, getWidth() - 1, getHeight() - 1, paint);
         canvas.drawLines(ptsx, paint);
         canvas.drawLines(ptsy, paint);
@@ -163,11 +162,11 @@ public class MonsterView extends View {
                     monster.getDot().getX() * addy + addy-50,
                     paint);*/
 
-            canvas.drawCircle(monster.getDot().getX() * addx + addx/2,monster.getDot().getY()*addy+addy/2,50,paint);
+            canvas.drawCircle(dot.getY() * addx + addx/2,dot.getX()*addy+addy/ 2,50,paint);
         }
 
         // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-// 绘图
+
         // canvas.drawBitmap(bitmap, dot.getY() * addx, dot.getX() * addy, paint);}
 
         monsters.clearMonsters();//}

@@ -199,7 +199,7 @@ public class TouchMe extends Activity {
                 for(Monster lm:newmonsterlist){
                     int c= random.nextInt(2);
                     lm.setColor(c==0?Color.GREEN:Color.YELLOW);
-                    System.out.println("color:"+c);
+                  //  System.out.println("color:"+c);
                     try {
                         lm.getDot().randomNeighbor().enter(lm);
                     } catch (InterruptedException e) {
@@ -220,6 +220,7 @@ public class TouchMe extends Activity {
                 }
 
                 newmonsterlist.clear();
+
                 publishProgress(monsterModel);
             }}
                 return null;

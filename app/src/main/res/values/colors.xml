@@ -6,4 +6,6 @@
     <color name="grey">#999999</color>
     <color name="dk_grey">#666666</color>
     <color name="white">#ffffffff</color>
+    <color name="MAGENTA">#ffff00ff</color>
+
 </resources>
